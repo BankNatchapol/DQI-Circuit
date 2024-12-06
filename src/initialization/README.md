@@ -1,35 +1,67 @@
-# Maximizing the Expected Number of Satisfied Constraints in DQI
 
-To maximize the expected number of satisfied constraints, denoted as $ \langle s^{(m, \ell)} \rangle $, in an optimization problem, the normalized eigenvector $ \mathbf{w} $ of the matrix $ A $, corresponding to its largest eigenvalue, is chosen.
+### Maximizing the Expected Number of Satisfied Constraints in DQI
 
-## Steps to Calculate $ \mathbf{w} $
+To maximize the expected number of satisfied constraints, denoted as $ \langle s^{(m, \ell)} \rangle $, the normalized eigenvector $\mathbf{w}$ of the matrix $A^{(m,\ell,d)}$, corresponding to its largest eigenvalue, is chosen. This choice ensures the maximization of the quadratic form $\mathbf{w}^\dagger A^{(m,\ell,d)} \mathbf{w}$. <br>
+**[Page 27]** From Lemma 6.1, the expected number of satisfied constraints is maximized by choosing $\mathbf{w}$ to be the normalized eigenvector of $A^{(m,\ell,d)}$ corresponding to its maximal eigenvalue.
 
-1. **Construct the Matrix $ A^{(m, \ell, d)} $:**
+---
 
-    $$ 
-    A^{(m,\ell,d)} = 
-    \begin{bmatrix}
-    0 & a_1 & 0 & \cdots & 0 \\
-    a_1 & d & a_2 & \cdots & 0 \\
-    0 & a_2 & 2d & \cdots & 0 \\
-    \vdots & \vdots & \vdots & \ddots & a_\ell \\
-    0 & 0 & 0 & a_\ell & \ell d
-    \end{bmatrix}
+### Relationship Between Eigenvector $\mathbf{w}$ and Maximizing Satisfied Constraints in DQI
+
+#### Connection via Quadratic Forms
+
+The expected number of satisfied constraints $ \langle s^{(m,\ell)} \rangle $ can be expressed as a quadratic form **[Equation 62]**, **[proof at Equation 64-103]**:
+
+$$
+    \langle s^{(m,\ell)} \rangle = \frac{mr}{p} + \frac{\sqrt{r(p-r)}}{p} \mathbf{w}^\dagger A^{(m,\ell,d)} \mathbf{w}
+$$
+
+where:
+- $A^{(m,\ell,d)}$ is a symmetric tridiagonal matrix whose elements are defined in **[Equation 63]** of the paper.
+- $\mathbf{w}$ represents the coefficients of the polynomial $P(f)$, normalized such that $\|\mathbf{w}\|_2 = 1$.
+
+#### Importance of the Principal Eigenvector
+The term $\mathbf{w}^\dagger A^{(m,\ell,d)} \mathbf{w}$ is maximized when $\mathbf{w}$ is aligned with the principal eigenvector of $A^{(m,\ell,d)}$, corresponding to its largest eigenvalue. This optimization ensures that $ \langle s^{(m,\ell)} \rangle $ achieves its maximum value.
+
+
+
+#### Explicit Construction of $A^{(m,\ell,d)}$
+The elements of $A^{(m,\ell,d)}$ are defined as:
+$$
+A_{ij} = 
+\begin{cases}
+d \cdot \text{diag}(1, 2, \ldots, \ell) & \text{(diagonal)} \\
+a_k = \sqrt{k(m-k+1)} & \text{(off-diagonal, } i=j\pm1\text{)}
+\end{cases}
+$$
+
+---
+
+### Steps to Compute $\mathbf{w}$
+
+1. **Construct the Matrix $A^{(m,\ell,d)}$:**
+
+    $$
+        A^{(m,\ell,d)} =
+        \begin{bmatrix}
+        0 & a_1 & 0 & \cdots & 0 \\
+        a_1 & d & a_2 & \cdots & 0 \\
+        0 & a_2 & 2d & \cdots & 0 \\
+        \vdots & \vdots & \vdots & \ddots & a_\ell \\
+        0 & 0 & 0 & a_\ell & \ell d
+        \end{bmatrix}
     $$
 
-    - $ a_k = \sqrt{k(m-k+1)} \, \text{and} \, d = \frac{p - 2r}{\sqrt{r(p-r)}} $
+   - $a_k = \sqrt{k(m-k+1)}$
+   - $d = \frac{p - 2r}{\sqrt{r(p-r)}}$
 
-2. **Find the Eigenvalues and Eigenvectors of $ A $:**
+2. **Eigenvalue and Eigenvector Computation:**
+   - Compute the eigenvalues of $A^{(m,\ell,d)}$ and find the eigenvector $\mathbf{w}_{\text{max}}$ corresponding to the largest eigenvalue.
 
-    Compute the eigenvalues of $ A^{(m,\ell,d)} $ and identify the eigenvector corresponding to the largest eigenvalue.
+3. **Normalize $\mathbf{w}$:**
+   - Ensure $\|\mathbf{w}\|_2 = 1$ for proper representation.
 
-3. **Normalize the Eigenvector to Obtain $ \mathbf{w} $:**
-
-    The normalized eigenvector $ \mathbf{w} $ satisfies:
-
-    $$
-    \|\mathbf{w}\|_2 = 1
-    $$
+---
 
 ## Parameters Description
 

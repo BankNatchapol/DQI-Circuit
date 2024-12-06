@@ -1,0 +1,93 @@
+# Byte-compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment folders
+env/
+venv/
+.venv/
+
+# Distribution / Packaging
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE-specific files
+.vscode/
+.idea/
+
+# Testing output
+.tox/
+.nox/
+*.coverage
+coverage.xml
+htmlcov/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*.swo
+*.~lock.*
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# PyInstaller
+# Usually these files are written by a python script from `PyInstaller`
+*.manifest
+*.spec
+
+# mypy
+.mypy_cache/
+.dmypy.json
+.dmypy/
+
+# pytest
+.pytest_cache/
+
+# Sphinx documentation
+docs/_build/
+
+# Pyre
+.pyre/
+
+# Local environment settings
+.env
+.env.*
+*.env
+
+# Anaconda
+*.conda
+*.ipynb_checkpoints
+
+# System-specific files
+*.orig
+*.rej
+
+# Other ignored files
+*.zip
+*.tar.gz
+*.tgz
+*.gz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.jar
+*.war
+*.apk
+*.crx
+*.gz~
+*.gpg
+*.bak
