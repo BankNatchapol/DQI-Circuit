@@ -8,7 +8,7 @@ def time_logger(func):
         start_time = time.time()
         result = func(*args, **kwargs)
         end_time = time.time()
-        print(f"Function '{func.__name__}' executed in {end_time - start_time:.6f} seconds.")
+        # print(f"Function '{func.__name__}' executed in {end_time - start_time:.6f} seconds.")
         total_time = end_time - start_time
         return result, total_time 
     return wrapper

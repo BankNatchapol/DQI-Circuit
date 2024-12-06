@@ -9,8 +9,8 @@ from utils import time_logger
 # Define the original and optimized functions
 @time_logger
 def original_construct_A_matrix(m, ell, p, r):
-    if m <= ell:
-        raise ValueError(f"Invalid input: m ({m}) must be greater than ell ({ell}).")
+    if m < ell:
+        raise ValueError(f"Invalid input: m ({m}) must be greater or equal than ell ({ell}).")
     
     d = (p - 2 * r) / np.sqrt(r * (p - r))
     A = np.zeros((ell + 1, ell + 1))
@@ -26,8 +26,8 @@ def original_construct_A_matrix(m, ell, p, r):
 @time_logger
 def construct_A_matrix(m, ell, p, r):
     """Optimized version"""
-    if m <= ell:
-        raise ValueError(f"Invalid input: m ({m}) must be greater than ell ({ell}).")
+    if m < ell:
+        raise ValueError(f"Invalid input: m ({m}) must be greater or equal than ell ({ell}).")
     
     d = (p - 2 * r) / np.sqrt(r * (p - r))
     diag = np.arange(ell + 1) * d
@@ -51,12 +51,13 @@ if __name__ == "__main__":
     m, p, r = 100000, 2, 1  # Fixed parameters
 
     for ell in matrix_sizes:
-        if m <= ell:
-            print(f"Skipping ell={ell} since m ({m}) <= ell ({ell}).")
+        if m < ell:
+            print(f"Skipping ell={ell} since m ({m}) < ell ({ell}).")
             continue
 
         result_a, original_time = original_construct_A_matrix(m, ell, p, r)
         result_b, optimized_time = construct_A_matrix(m, ell, p, r)
+        
         original_times.append(original_time)
         optimized_times.append(optimized_time)
 
