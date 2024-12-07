@@ -1,7 +1,7 @@
 
 ### Maximizing the Expected Number of Satisfied Constraints in DQI
 
-To maximize the expected number of satisfied constraints, denoted as $ \langle s^{(m, \ell)} \rangle $, the normalized eigenvector $\mathbf{w}$ of the matrix $A^{(m,\ell,d)}$, corresponding to its largest eigenvalue, is chosen. This choice ensures the maximization of the quadratic form $\mathbf{w}^\dagger A^{(m,\ell,d)} \mathbf{w}$. <br>
+To maximize the expected number of satisfied constraints, denoted as $\langle s^{(m, \ell)} \rangle$, the normalized eigenvector $\mathbf{w}$ of the matrix $A^{(m,\ell,d)}$, corresponding to its largest eigenvalue, is chosen. This choice ensures the maximization of the quadratic form $\mathbf{w}^\dagger A^{(m,\ell,d)} \mathbf{w}$. <br>
 **[Page 27]** From Lemma 6.1, the expected number of satisfied constraints is maximized by choosing $\mathbf{w}$ to be the normalized eigenvector of $A^{(m,\ell,d)}$ corresponding to its maximal eigenvalue.
 
 ---
@@ -10,7 +10,7 @@ To maximize the expected number of satisfied constraints, denoted as $ \langle s
 
 #### Connection via Quadratic Forms
 
-The expected number of satisfied constraints $ \langle s^{(m,\ell)} \rangle $ can be expressed as a quadratic form **[Equation 62]**, **[proof at Equation 64-103]**:
+The expected number of satisfied constraints $\langle s^{(m,\ell)} \rangle$ can be expressed as a quadratic form **[Equation 62]**, **[proof at Equation 64-103]**:
 
 $$
     \langle s^{(m,\ell)} \rangle = \frac{mr}{p} + \frac{\sqrt{r(p-r)}}{p} \mathbf{w}^\dagger A^{(m,\ell,d)} \mathbf{w}
