@@ -42,8 +42,7 @@ $$
 1. **Construct the Matrix $A^{(m,\ell,d)}$:**
 
     $$
-        A^{(m,\ell,d)} =
-        \begin{bmatrix}
+        A^{(m,\ell,d)} = \begin{bmatrix}
         0 & a_1 & 0 & \cdots & 0 \\
         a_1 & d & a_2 & \cdots & 0 \\
         0 & a_2 & 2d & \cdots & 0 \\
@@ -82,7 +81,7 @@ $$
 - Used in constructing the matrix $A^{(m,\ell,d)}$. Defined as:
 
     $$
-    d = \frac{p - 2r}{\sqrt{r(p - r)}}
+        d = \frac{p - 2r}{\sqrt{r(p - r)}}
     $$
 
 - Quantifies the balance between satisfying and unsatisfying assignments for individual constraints. Affects the structure and eigenvalues of $A$, which influence the performance of the DQI algorithm.
@@ -102,7 +101,7 @@ $$
 - Represents the number of elements in $\mathbb{F}_p$ that map to $+1$ under a constraint function $f_i$. Mathematically:
 
     $$
-    r = |f_i^{-1}(+1)|
+        r = |f_i^{-1}(+1)|
     $$
 
 - Assumed constant for all constraint functions $f_i$ in most cases.
