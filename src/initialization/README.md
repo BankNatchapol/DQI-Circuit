@@ -27,12 +27,12 @@ The term $\mathbf{w}^\dagger A^{(m,\ell,d)} \mathbf{w}$ is maximized when $\math
 
 #### Explicit Construction of $A^{(m,\ell,d)}$
 The elements of $A^{(m,\ell,d)}$ are defined as:
+
 $$
-A_{ij} = 
-\begin{cases}
-d \cdot \text{diag}(1, 2, \ldots, \ell) & \text{(diagonal)} \\
-a_k = \sqrt{k(m-k+1)} & \text{(off-diagonal, } i=j\pm1\text{)}
-\end{cases}
+    A_{ij} = \begin{cases}
+    d \cdot \text{diag}(1, 2, \ldots, \ell) & \text{(diagonal)} \\
+    a_k = \sqrt{k(m-k+1)} & \text{(off-diagonal, } i=j\pm1\text{)}
+    \end{cases}
 $$
 
 ---
