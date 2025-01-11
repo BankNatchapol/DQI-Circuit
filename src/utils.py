@@ -1,4 +1,5 @@
 import time
+from itertools import product
 
 def time_logger(func):
     """
@@ -15,3 +16,7 @@ def time_logger(func):
 
 def expected_number_of_satisfied_constraints(x):
     pass
+
+def binary_combinations(n):
+    # Generate all combinations of binary of length n
+    return [''.join(map(str, bits)) for bits in product([0, 1], repeat=n)]

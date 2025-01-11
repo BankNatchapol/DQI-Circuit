@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import sys
 sys.path.append(r".\src")
 from utils import time_logger
+import math
 
 @time_logger
 def calculate_w_dense(A):
@@ -21,14 +22,21 @@ def calculate_w_dense(A):
 
 
 @time_logger
-def calculate_w_sparse(A):
+def calculate_w(A):
     """
     Calculate w for sparse matrix.
     """
     largest_eigenvalue, largest_eigenvector = eigs(A, k=1, which='LM')
     w = largest_eigenvector.flatten().real
     w /= np.linalg.norm(w)
-    return w
+
+    original_size = w.shape[0]
+    power = math.ceil(math.log2(original_size))
+    target_size = 2 ** power
+    padded_w = np.zeros(target_size, dtype=w.dtype)
+    padded_w[:original_size] = w
+
+    return padded_w
 
 if __name__ == "__main__":
     
@@ -52,7 +60,7 @@ if __name__ == "__main__":
 
         # Sparse matrix
         A_sparse, sparse_construction_time = construct_A_matrix(m, ell, p, r)
-        _, sparse_w_time = calculate_w_sparse(A_sparse)
+        _, sparse_w_time = calculate_w(A_sparse)
 
         # Record times
         dense_construction_times.append(dense_construction_time)
