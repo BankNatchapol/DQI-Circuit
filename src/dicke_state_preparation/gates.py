@@ -67,7 +67,7 @@ class SCSnkGate(Gate):
 
         self.definition = qc
 
-class DickeStatePreparation(QuantumCircuit):
+class UnkStatePreparation(QuantumCircuit):
     def __init__(
         self,
         n,
@@ -85,6 +85,35 @@ class DickeStatePreparation(QuantumCircuit):
         k = self.k
         label = f"{n},{k}"
         qc = QuantumCircuit(n, name=f"$U_{{{label}}}$")
+        # for i in range(k):
+        #     qc.x(i)
+            
+        for l in range(n, k, -1):
+            qc.append(SCSnkGate(n=l, k=k), range(n-l, n-l+k+1))
+
+        for l in range(k, 1, -1):
+            qc.append(SCSnkGate(n=l, k=l-1), range(n-l, n))
+
+        return qc
+
+class DickeStatePreparation(QuantumCircuit):
+    def __init__(
+        self,
+        n,
+        k
+        ):
+        self.n = n
+        self.k = k
+        
+        qc = self.circuit()
+        super().__init__(*qc.qregs, name=qc.name)
+        self.compose(qc.to_gate(), qubits=self.qubits, inplace=True)
+    
+    def circuit(self):
+        n = self.n
+        k = self.k
+        label = f"{n},{k}"
+        qc = QuantumCircuit(n, name=f"$D_{{{label}}}$")
         for i in range(k):
             qc.x(i)
             

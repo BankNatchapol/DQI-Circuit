@@ -1,5 +1,6 @@
 import time
 from itertools import product
+import qiskit
 
 def time_logger(func):
     """
@@ -20,3 +21,8 @@ def expected_number_of_satisfied_constraints(x):
 def binary_combinations(n):
     # Generate all combinations of binary of length n
     return [''.join(map(str, bits)) for bits in product([0, 1], repeat=n)]
+
+def choose(n, k):
+    if k == 0:
+        return 1
+    return (n * choose(n - 1, k - 1)) // k
