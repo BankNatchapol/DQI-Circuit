@@ -57,12 +57,3 @@ The DQI Circuit algorithm offers an innovative approach to optimization and quan
    ```bash
    pip install -r requirements.txt
    ```
-
-### Usage
-
-1. Run the example script:
-   ```bash
-   python src/examples/example1.py
-   ```
-
-2. Customize the parameters in `dqi_circuit.py` for your experiments.

@@ -1,24 +1,37 @@
 import numpy as np
 from qiskit import QuantumCircuit
 from qiskit.circuit import Gate
+from typing import List, Tuple
 
-# (Assuming gauss_jordan_operations_general is defined as in your code)
-def gauss_jordan_operations_general(matrix):
+def gauss_jordan_operations_general(
+    matrix: List[List[int]]
+) -> Tuple[List[Tuple[str, int, int]], List[List[int]]]:
     """
-    Perform Gauss–Jordan elimination mod 2 on an m x n matrix
-    and record row operations.
+    Perform Gauss–Jordan elimination mod 2 on an m x n augmented matrix and record row operations.
 
-    Returns (operations, rref_matrix), where each operation is:
+    The input matrix is assumed to be a list of lists of 0s and 1s representing the augmented 
+    matrix [A | b]. The function returns a tuple (operations, rref_matrix), where each operation is 
+    represented as:
       - ('swap', i, j): swap row i with row j.
       - ('xor', i, j): replace row j with row j XOR row i.
+
+    Args:
+        matrix: The augmented matrix (List of List of ints) over GF(2).
+
+    Returns:
+        A tuple containing:
+          - A list of operations (as tuples of operation type and row indices).
+          - The resulting matrix in reduced row echelon form (RREF).
     """
-    m = len(matrix)
-    num_cols = len(matrix[0])
-    n = num_cols - 1
-    operations = []
-    mat = [row[:] for row in matrix]  # deep copy
-    pivot_row = 0
-    pivot_col = 0
+    m: int = len(matrix)
+    num_cols: int = len(matrix[0])
+    n: int = num_cols - 1  # Assumes the last column is the right-hand side.
+    operations: List[Tuple[str, int, int]] = []
+    # Create a deep copy of the matrix.
+    mat: List[List[int]] = [row[:] for row in matrix]
+    pivot_row: int = 0
+    pivot_col: int = 0
+
     while pivot_row < m and pivot_col < n:
         pivot_idx = None
         for r in range(pivot_row, m):
@@ -38,39 +51,44 @@ def gauss_jordan_operations_general(matrix):
                     mat[r][c] ^= mat[pivot_row][c]
         pivot_row += 1
         pivot_col += 1
+
     return operations, mat
 
 class GJEGate(Gate):
     """
-    A custom gate that encapsulates the elimination (row operations) on the b‑register only.
-    
-    Given a binary coefficient matrix A and right-hand side vector b (as NumPy arrays),
-    the gate computes the recorded Gauss–Jordan operations on the augmented matrix [A | b]
-    and then applies those operations on a register representing b.
-    
-    Note: This gate includes measurements on the b‑register.
-    """
-    def __init__(self, A):
-        """
-        Args:
-            A (np.ndarray): The binary coefficient matrix (shape m x n).
-            b (np.ndarray): The binary right-hand side vector (shape m x 1 or (m,)).
-        """
-        # Ensure b is a 1D list of bits.
-        
-        A_list = A.tolist()
-        m = len(A_list)
-        # Record the row operations via Gauss–Jordan elimination mod2.
-        ops, _ = gauss_jordan_operations_general(A_list)
-        # Initialize the gate: acts on m qubits.
-        super().__init__("GJE", m, [])
-        self.operations = ops
-        self.A = A
+    Custom gate implementing Gauss–Jordan elimination (mod 2) on a binary matrix.
 
-    def _define(self):
-        m = len(self.A)
-        qc = QuantumCircuit(m)
-        # Apply the recorded row operations.
+    This gate computes the Gauss–Jordan elimination operations on an augmented binary 
+    matrix [A | b] (with b implicitly included in A) and then applies these row operations 
+    on a quantum register representing b.
+
+    Note:
+      - The gate acts on m qubits, where m is the number of rows in A.
+      - Operations are recorded as swaps and XORs (implemented as CNOTs).
+    """
+    def __init__(self, A: np.ndarray) -> None:
+        """
+        Initialize the GJEGate.
+
+        Args:
+            A: The binary coefficient matrix (shape m x n) over GF(2).
+        """
+        A_list: List[List[int]] = A.tolist()  # Convert to a list of lists.
+        m: int = len(A_list)
+        ops, _ = gauss_jordan_operations_general(A_list)
+        super().__init__("GJE", m, [])
+        self.operations: List[Tuple[str, int, int]] = ops
+        self.A: np.ndarray = A
+
+    def _define(self) -> None:
+        """
+        Define the gate's decomposition as a QuantumCircuit.
+
+        The circuit applies the recorded row operations (swaps and XORs) according to the 
+        Gauss–Jordan elimination mod 2.
+        """
+        m: int = len(self.A)
+        qc = QuantumCircuit(m, name="GJE")
         for op in self.operations:
             op_type, i, j = op
             if op_type == 'swap':

@@ -1,6 +1,6 @@
 from qiskit import QuantumCircuit
 from qiskit.circuit import Gate
-from itertools import product
+from typing import Union, Sequence
 import numpy as np
 
 # class GGate(Gate):
@@ -86,37 +86,56 @@ import numpy as np
 #             qc.mcmt([], )
 #         self.definition = qc
 
+
 class WeightedUnaryEncoding(Gate):
-    def __init__(self, num_bit, weights):
-        """
-        Create a weighted unary state preparation gate.
+    """
+    Weighted Unary Encoding gate for state preparation.
 
-        Args:
-            num_bit (int): Number of qubits.
-            weights (list or np.ndarray): A normalized list of weights.
-        """
-        # Optionally: Add a check to ensure weights are normalized or that len(weights) is acceptable.
-        super().__init__("WeightedUnary", num_bit, [])
-        self.num_bit = num_bit
-        self.weights = weights
+    This gate prepares a weighted unary state by applying a series of rotations.
+    For each weight index l, the rotation angle is computed as:
 
-    def _define(self):
-        qc = QuantumCircuit(self.num_bit, name="WeightedUnary")
-        # Compute the rotation angles.
-        # Note: For each weight l, we compute beta_l = 2 * arccos( min( sqrt(weights[l]^2 / (1 - sum(weights[:l]^2)), 1) ).
-        betas = np.array([
-            min(np.sqrt(self.weights[l]**2 / (1 - np.sum(np.array(self.weights[:l])**2))), 1)
-            for l in range(len(self.weights))
-        ])
-        betas = 2 * np.arccos(betas)
+        beta_l = 2 * arccos( min( sqrt(weights[l]^2 / (1 - sum_{j<l} weights[j]^2)), 1) )
+
+    The first qubit is rotated with an RY gate and subsequent qubits are rotated
+    with controlled RY (CRY) gates.
+
+    Args:
+        num_bit (int): Number of qubits.
+        weights (Union[np.ndarray, Sequence[float]]): A normalized list of weights.
+    """
+    def __init__(self, num_bit: int, weights: Union[np.ndarray, Sequence[float]]) -> None:
+        super().__init__("Weighted_Unary", num_bit, [])
+        self.num_bit: int = num_bit
+        # Ensure weights are stored as a numpy array of floats.
+        self.weights: np.ndarray = np.array(weights, dtype=float)
+
+    def _define(self) -> None:
+        """
+        Define the internal structure of the Weighted Unary Encoding gate.
+        """
+        qc = QuantumCircuit(self.num_bit, name="Weighted_Unary")
+        
+        # Compute rotation angles for each weight.
+        betas = []
+        for l in range(len(self.weights)):
+            # Denom = 1 - sum_{j=0}^{l-1} (weights[j]^2)
+            denom = 1 - np.sum(self.weights[:l] ** 2)
+            # To avoid division by zero, set ratio to 0 when denom is zero.
+            ratio = (self.weights[l] ** 2) / denom if denom > 0 else 0.0
+            # Ensure the argument for arccos is at most 1.
+            value = min(np.sqrt(ratio), 1.0)
+            beta = 2 * np.arccos(value)
+            betas.append(beta)
+        betas = np.array(betas)
 
         # Apply the first rotation on qubit 0.
         qc.ry(betas[0], 0)
-        # Apply controlled Ry rotations on subsequent qubits.
+        # Apply controlled RY rotations on subsequent qubits.
         for i in range(1, self.num_bit):
             if i >= len(betas):
                 continue
-            if np.isnan(betas[i]):
+            if np.isnan(betas[i]) or betas[i] == 0.0:
                 continue
             qc.cry(betas[i], i - 1, i)
+        
         self.definition = qc
