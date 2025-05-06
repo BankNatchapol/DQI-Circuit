@@ -58,3 +58,10 @@ print("Optimal degree:", optimal_polynomial_degree(m, d_perp))
 
 **How this works:** If we know the code’s **dual distance** $d^\perp$, we set $\ell = \lfloor d^\perp/2\rfloor$, reflecting the code’s ability to correct up to that many errors ([complexity theory - What codes can Decoded Quantum Interferometry (DQI) exploit best? - Quantum Computing Stack Exchange](https://quantumcomputing.stackexchange.com/questions/41149/what-codes-can-decoded-quantum-interferometry-dqi-exploit-best#:~:text=decodability%20up%20to%20%24,there%20more%20such%20nice%20codes)). If we lack that information, we use a simpler heuristic (here, half the number of constraints) as a proxy for a typical decodable error count. In a real scenario, one could refine this by incorporating more knowledge of the problem’s structure or by iteratively testing increasing degrees until the expected value gain saturates. The chosen $\ell$ should then be used to construct the polynomial $P(f)$ with nonzero coefficients from $f^0$ through $f^\ell$, using (for example) the eigenvector method described in the paper to find the exact optimal coefficients ([optimization - Choosing an optimal polynomial for Decoded Quantum Interferometry (DQI) - Quantum Computing Stack Exchange](https://quantumcomputing.stackexchange.com/questions/41150/choosing-an-optimal-polynomial-for-decoded-quantum-interferometry-dqi#:~:text=It%20is%20this%20property%20of,is%20done%20in%20our%20manuscript)).
 
+
+
+logger = logging.getLogger("dqi")
+logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler("../dqi.log")
+handler.setFormatter(logging.Formatter("%(asctime)s — %(message)s"))
+logger.addHandler(handler)

@@ -1,59 +1,30 @@
-# DQI Circuit: Implementation of Decoded Quantum Interferometry Algorithm
+# DQI‑Circuit: Decoded Quantum Interferometry Implementation
+<div>
+    <a href="https://arxiv.org/abs/2504.18334"><img src="https://img.shields.io/badge/arXiv-Paper-<COLOR>.svg"></a>
+    <a href="https://github.com/BankNatchapol/DQI-Circuit"><img src="https://img.shields.io/badge/README-GitHub-blue"></a>
+</div>
+<br>
 
-## Introduction
+This repository provides an implementation of the **Decoded Quantum Interferometry (DQI)** algorithm originally introduced in [arXiv:2408.08292](https://arxiv.org/abs/2408.08292). Detailed implementation choices, performance benchmarks, and extensions are described in our paper ["Quantum Circuit Design for Decoded Quantum Interferometry" (arXiv:2504.18334)](https://arxiv.org/abs/2504.18334).
 
-This repository contains an implementation of the **Decoded Quantum Interferometry (DQI)** algorithm as described in the research paper ["Decoded Quantum Interferometry" (arXiv:2408.08292)](https://arxiv.org/pdf/2408.08292). 
+---
 
-The DQI Circuit algorithm offers an innovative approach to optimization and quantum computing, leveraging quantum interferometry principles. This implementation aims to reproduce the results and provide a framework for further exploration and experimentation.
+## Repository Layout
 
-## Features
-
-- Implementation of the DQI Circuit as outlined in the paper.
-- Includes examples for running the algorithm on test cases.
-- Modular and extensible codebase for customizing the circuit design and parameters.
-- Supports both simulation and real quantum device execution.
-
-## Repository Structure
-
-```
+```text
 .
-├── README.md               # Project documentation
-├── requirements.txt        # Python dependencies
+├── README.md                   # This overview
+├── requirements.txt            # Pinned dependencies
 ├── src/
-│   ├── dqi_circuit.py      # Core implementation of the DQI Circuit
-│   ├── utils.py            # Helper functions for quantum operations
-│   └── examples/
-│       ├── example1.py     # Example usage script
-│       ├── example2.py     # Advanced parameter settings
-│       └── ...
-├── tests/
-│   ├── test_dqi.py         # Unit tests for the DQI Circuit implementation
-│   ├── test_utils.py       # Unit tests for utility functions
-├── data/
-│   └── inputs/             # Sample input data for experiments
-│   └── outputs/            # Generated results and metrics
-└── docs/
-    ├── paper_summary.md    # Overview and key takeaways from the paper
-    ├── usage_guide.md      # Detailed usage instructions
-    └── api_reference.md    # API documentation for the core modules
+│   └── dqi/                    # Main package
+│       ├── initialization/     # State preparation and weights calculation
+│       ├── dicke_state_preparation/     # Gates for preparing dicke state
+│       ├── decoding/           # Gauss-Jordan elimination, USD, and solver gates
+│       └── utils/              # Timing, plotting, and helper functions
+├── scripts/                    # Command‑line benchmarks & runners
+├── notebooks/                  # Interactive demos & resource estimation
+│   └── main.ipynb
+├── figures/                    
+├── docs/                    
+└── tests/                      # Random testing files
 ```
-
-## Getting Started
-
-### Prerequisites
-
-- Python 3.8 or higher
-- Qiskit or other quantum libraries (specified in `requirements.txt`)
-
-### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/dqi-circuit.git
-   cd dqi-circuit
-   ```
-
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
