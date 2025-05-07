@@ -125,8 +125,8 @@ def usd_reduction(
     for attempt in range(1, max_attempts + 1):
         recovered, _ = apply_usd_once(qc, wires, p, simulator)
         idx = np.where(recovered >= 0)[0]
-        if len(idx) >= m:
-            return B[:, idx]
+        if len(idx) >= n:
+            return B[idx, :]
         print(f"USD attempt {attempt} inconclusive: {recovered}")
     print(f"Exceeded {max_attempts} USD attempts; returning original B")
     return B

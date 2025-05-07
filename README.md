@@ -9,6 +9,7 @@ This repository provides an implementation of the **Decoded Quantum Interferomet
 
 ---
 
+
 ## Repository Layout
 
 ```text
@@ -28,3 +29,4 @@ This repository provides an implementation of the **Decoded Quantum Interferomet
 ├── docs/                    
 └── tests/                      # Random testing files
 ```
+
