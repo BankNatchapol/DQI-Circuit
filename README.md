@@ -137,6 +137,76 @@ circuit_sizes = [(4,4), (6,6), (8,8), (10,10),
                  (22,22), (24,24)]  # Modify this list to generate different sizes
 ```
 
+The script will generate circuits with the following characteristics:
+
+1. Circuit Generation Parameters:
+   - Matrix sizes from 4x4 up to 24x24
+   - Maximum 3 attempts per size
+   - 300 seconds timeout per attempt
+   - BP height parameter from 2 to 4
+   - Both BP (Belief Propagation) and GJE (Gauss-Jordan Elimination) methods
+   - Random matrix density of 0.1
+
+2. Output Structure:
+```
+circuits/
+├── bp/                           # BP decoded circuits
+│   └── circuit_YYYYMMDD_HHMMSS_n8m8_q24_d42_bp/  # Directory name format explained below
+│       ├── circuit.qpy          # Circuit in QPY format
+│       ├── circuit_properties.json  # Detailed gate counts etc.
+│       ├── metadata.json        # Circuit parameters and configuration
+│       └── parity_check_matrix.npy  # Matrix H used
+└── gje/                          # GJE decoded circuits
+    └── circuit_YYYYMMDD_HHMMSS_n8m8_q24_d42_gje/
+        ├── circuit.qpy
+        ├── circuit_properties.json
+        ├── metadata.json
+        └── parity_check_matrix.npy
+```
+
+Directory Name Format:
+- `circuit_`: Prefix for all generated circuits
+- `YYYYMMDD_HHMMSS`: Timestamp of generation (e.g., 20240418_143022)
+- `n8m8`: Matrix dimensions (n=columns, m=rows)
+- `q24`: Total number of qubits in the circuit
+- `d42`: Circuit depth after transpilation
+- `bp` or `gje`: Decoding method used
+
+Example: `circuit_20240418_143022_n8m8_q24_d42_bp` means:
+- Generated on April 18, 2024 at 14:30:22
+- 8x8 parity check matrix
+- Uses 24 qubits
+- Has depth 42 after transpilation
+- Uses Belief Propagation decoding
+
+The metadata includes:
+```json
+{
+    "creation_date": "YYYYMMDD_HHMMSS",
+    "circuit_size": "8x8",
+    "num_qubits": 24,
+    "circuit_depth": 42,
+    "gate_counts": {
+        "ecr": 30,
+        "rz": 40,
+        "sx": 20,
+        "x": 10,
+        "measure": 16
+    },
+    "matrix_density": 0.1,
+    "decoding_method": "bp",
+    "basis_gates": ["ecr", "id", "rz", "sx", "x"],
+    "optimization_level": 3
+}
+```
+
+Important Notes:
+- The script uses the same matrix H for both BP and GJE methods
+- For BP, it tries increasing heights (2 to 4) until success
+- Only successful circuits are saved
+- Previous circuits of the same size and method are automatically removed
+- All circuits are transpiled to basis gates (ECR, ID, RZ, SX, X) with optimization level 3
+
 ### Interactive Notebooks
 
 - `notebooks/main.ipynb`: Main DQI implementation and examples
