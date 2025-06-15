@@ -129,11 +129,24 @@ def plot_results_union_plotly(
         tick0=0, dtick=left_dtick, showgrid=True, gridcolor="lightblue"
     )
     if norm_dqi:
+        
+        dqi_pos = round(max(ext_probs)*1.35, 3)
+        symmetric_range = [-dqi_pos, dqi_pos]
+
         fig.update_yaxes(
             title_text="Probability (DQI)",
-            range=dqi_range,
+            # center zero in the middle
+            range=symmetric_range,
             secondary_y=True,
-            tick0=0, dtick=right_dtick, showgrid=True, gridcolor="lightcoral"
+            # only show positive tick-labels
+            tickmode="array",
+            tickvals=[i*right_dtick for i in range(int(dqi_pos/right_dtick)+3)],
+            ticktext=[f"{i*right_dtick:.2f}" for i in range(int(dqi_pos/right_dtick)+3)],
+            showgrid=True,
+            gridcolor="lightcoral",
+            zeroline=True,
+            zerolinewidth=2,
+            zerolinecolor="black",
         )
 
     fig.update_layout(
