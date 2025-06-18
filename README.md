@@ -37,22 +37,48 @@ This repository provides an implementation of the **Decoded Quantum Interferomet
 ├── requirements.txt            # Pinned dependencies
 ├── src/
 │   └── dqi/                   # Main package
-│       ├── initialization/    # State preparation and weights calculation
-│       ├── dicke_state_preparation/  # Gate for preparing dicke state
-│       ├── decoding/         # BPQM, Gauss-Jordan elimination, USD gates
-│       │   ├── BPQM/        # Belief Propagation Quantum Matching
-│       │   └── gates.py     # Core decoding gates
-│       └── utils/           # Timing, plotting, and helper functions
-├── scripts/                  # Command‑line tools and circuit generators
-│   └── generate_dqi_bp_circuit.py  # BP circuit generation script
-├── notebooks/               # Interactive demos & resource estimation
-│   ├── main.ipynb          # Main DQI implementation
-│   ├── main_bp.ipynb       # Belief propagation implementation
-│   └── main_RSB.ipynb      # Reed-Solomon-Bacon implementation
-├── figures/                 # Generated figures and plots
-├── docs/                    # Documentation
-└── tests/                   # Test files
+│       ├── qiskit/            # Qiskit-specific implementations
+│       │   ├── initialization/ # Qiskit state preparation and weight calculation
+│       │   ├── dicke_state_preparation/ # Qiskit Dicke state gates
+│       │   └── decoding/      # Qiskit decoding gates, algorithms, and BPQM
+│       ├── cirq/              # Cirq-specific implementations
+│       │   ├── initialization/ # Cirq state preparation and weight calculation
+│       │   ├── dicke_state_preparation/ # Cirq Dicke state gates
+│       │   └── decoding/      # Cirq decoding gates and algorithms
+│       └── utils/             # Shared utilities and helper functions
+├── scripts/                   # Command‑line tools and circuit generators
+│   ├── generate_dqi_circuit_qiskit.py  # Qiskit circuit generation
+│   └── generate_dqi_circuit_cirq.py    # Cirq circuit generation
+├── notebooks/                 # Interactive demos & resource estimation
+│   ├── main.ipynb            # Main DQI implementation
+│   ├── main_bp.ipynb         # Belief propagation implementation
+│   └── main_RSB.ipynb        # Reed-Solomon-Bacon implementation
+├── figures/                   # Generated figures and plots
+├── docs/                      # Documentation
+└── tests/                     # Test files
+    ├── test_qiskit_implementation.py  # Qiskit tests
+    └── test_cirq_implementation.py    # Cirq tests
 ```
+
+### Multi-Library Support
+
+The codebase now supports multiple quantum computing frameworks:
+
+- **Qiskit Implementation** (`src/dqi/qiskit/`): Original implementation using IBM's Qiskit
+- **Cirq Implementation** (`src/dqi/cirq/`): Google Cirq implementation with equivalent functionality
+- **Common Code** (`src/dqi/common/`): Shared algorithms and utilities
+
+To use a specific framework:
+
+```python
+# For Qiskit
+from scripts.generate_dqi_circuit_qiskit import generate_dqi_circuit
+
+# For Cirq
+from scripts.generate_dqi_circuit_cirq import generate_dqi_circuit_cirq
+```
+
+Both implementations generate compatible circuits with similar interfaces but leverage framework-specific optimizations.
 
 ---
 
@@ -88,17 +114,21 @@ git clone https://github.com/BankNatchapol/BPQM-Syndrome-Decoding src/dqi/decodi
 ### Basic Circuit Generation
 
 ```python
-from scripts.generate_dqi_bp_circuit import generate_dqi_bp_circuit
+# For Qiskit implementation
+from scripts.generate_dqi_circuit_qiskit import generate_dqi_circuit
 
-# Generate circuit with random matrix
-circuit, properties = generate_dqi_bp_circuit(
+# For Cirq implementation  
+from scripts.generate_dqi_circuit_cirq import generate_dqi_circuit_cirq
+
+# Generate circuit with random matrix (Qiskit)
+circuit, properties = generate_dqi_circuit(
     n=8,                     # number of variable nodes
     m=4,                     # number of check nodes
     density=0.5,            # density of 1s in the matrix
     save_path="circuits/random_circuit.qasm"  # optional: save the circuit
 )
 
-# Generate circuit with specific matrix
+# Generate circuit with specific matrix (Cirq)
 import numpy as np
 H = np.array([
     [1, 1, 0, 0, 1, 0, 0, 0],
@@ -106,7 +136,7 @@ H = np.array([
     [0, 0, 1, 1, 0, 0, 1, 0],
     [1, 0, 0, 1, 0, 0, 0, 1]
 ])
-circuit, properties = generate_dqi_bp_circuit(
+circuit, properties = generate_dqi_circuit_cirq(
     H=H,
     save_path="circuits/specific_circuit.qasm"
 )
@@ -118,10 +148,10 @@ To generate multiple DQI circuits with different sizes and decoding methods:
 
 ```bash
 # Generate circuits using both BP and GJE decoding methods
-python scripts/generate_dqi_circuit.py
+python scripts/generate_dqi_circuit_qiskit.py
 ```
 
-The script will generate circuits for various matrix sizes (from 4x4 up to 24x24) using both Belief Propagation (BP) and Gauss-Jordan Elimination (GJE) methods. You can customize the generation by modifying the following parameters in `scripts/generate_dqi_circuit.py`:
+The script will generate circuits for various matrix sizes (from 4x4 up to 24x24) using both Belief Propagation (BP) and Gauss-Jordan Elimination (GJE) methods. You can customize the generation by modifying the following parameters in `scripts/generate_dqi_circuit_qiskit.py`:
 
 - `circuit_sizes`: List of tuples defining matrix dimensions (n,m)
 - `max_attempts`: Number of retries per size (default: 3)
@@ -131,7 +161,7 @@ The script will generate circuits for various matrix sizes (from 4x4 up to 24x24
 
 Example of customizing circuit sizes:
 ```python
-# In scripts/generate_dqi_circuit.py
+# In scripts/generate_dqi_circuit_qiskit.py
 circuit_sizes = [(4,4), (6,6), (8,8), (10,10), 
                  (12,12), (14,14), (16,16), (18,18), (20,20),
                  (22,22), (24,24)]  # Modify this list to generate different sizes

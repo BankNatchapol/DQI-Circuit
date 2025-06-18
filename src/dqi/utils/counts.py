@@ -47,7 +47,7 @@ def post_selection_counts(counts: Dict[str, int]) -> Dict[str, int]:
 
         first_part, second_part = parts
         try:
-            total = sum(int(bit) for bit in first_part)
+            total = sum(int(bit) for bit in first_part[::-1])
         except ValueError:
             logger.error(f"Non-digit found in first_part '{first_part}' of key '{key}'.")
             continue

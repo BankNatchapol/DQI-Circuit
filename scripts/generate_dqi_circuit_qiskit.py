@@ -18,14 +18,14 @@ from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit_aer import AerSimulator
 from qiskit.quantum_info import Statevector
 
-from src.dqi.initialization.state_preparation.gates import UnaryAmplitudeEncoding
-from src.dqi.initialization.calculate_w import get_optimal_w
-from src.dqi.dicke_state_preparation.gates import UnkGate
-from src.dqi.decoding.BPQM.linearcode import LinearCode
-from src.dqi.decoding.BPQM.decoders import create_init_qc, decode_single_syndrome
-from src.dqi.decoding.BPQM.cloner import VarNodeCloner
+from src.dqi.qiskit.initialization.state_preparation.gates import UnaryAmplitudeEncoding
+from src.dqi.qiskit.initialization.calculate_w import get_optimal_w
+from src.dqi.qiskit.dicke_state_preparation.gates import UnkGate
+from src.dqi.qiskit.decoding.BPQM.linearcode import LinearCode
+from src.dqi.qiskit.decoding.BPQM.decoders import create_init_qc, decode_single_syndrome
+from src.dqi.qiskit.decoding.BPQM.cloner import VarNodeCloner
 from src.dqi.utils.graph import get_max_xorsat_matrix
-from src.dqi.decoding.gates import GJEGate
+from src.dqi.qiskit.decoding.gates import GJEGate
 
 
 def generate_random_matrix(n: int, m: int, density: float = 0.5) -> np.ndarray:
